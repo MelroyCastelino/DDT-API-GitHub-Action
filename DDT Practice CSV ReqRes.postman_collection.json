@@ -1,0 +1,111 @@
+{
+  "info": {
+    "_postman_id": "c5dc8f01-5a8c-41d7-a7af-2a161fdf61f2",
+    "name": "DDT Practice CSV ReqRes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44978891"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Read expected status from data file\r",
+              "var expectedStatus = parseInt(pm.iterationData.get(\"expectedStatus\"));\r",
+              "var testCase = pm.iterationData.get(\"testCase\");\r",
+              "var name = pm.iterationData.get(\"name\");\r",
+              "var email = pm.iterationData.get(\"email\");\r",
+              "\r",
+              "// Test 1: Status code matches expected\r",
+              "pm.test(\"✅ [\" + testCase + \"] Status = \" + expectedStatus, function() {\r",
+              "    pm.response.to.have.status(expectedStatus);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Response time check\r",
+              "pm.test(\"✅ [\" + testCase + \"] Response fast\", function() {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Success case specific checks\r",
+              "if (expectedStatus === 201) {\r",
+              "    pm.test(\"✅ [\" + testCase + \"] Has user ID\", function() {\r",
+              "        var json = pm.response.json();\r",
+              "        pm.expect(json.id).to.exist;\r",
+              "    });\r",
+              "}\r",
+              "\r",
+              "// Log current iteration\r",
+              "console.log(\"Iteration:\", pm.info.iteration + 1);\r",
+              "console.log(\"Test Case:\", testCase);\r",
+              "console.log(\"Name:\", name, \"| Email:\", email);\r",
+              "console.log(\"Expected:\", expectedStatus, \"| Actual:\", pm.response.code);\r",
+              "console.log(\"---\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "reqres_3c4a57e59e9f425397b2c036d0d38c92",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"age\": \"{{age}}\",\r\n  \"role\": \"{{role}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

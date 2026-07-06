@@ -1,0 +1,10 @@
+name,email,age,role,expectedStatus,testCase
+John Doe,john@test.com,25,admin,201,Valid admin user
+Jane Smith,jane@test.com,30,user,201,Valid regular user
+Bob Jones,,25,user,400,Missing email
+Alice,invalid-email,22,user,400,Invalid email format
+Teen User,teen@test.com,16,user,400,Age below minimum
+Old User,old@test.com,200,user,400,Age above maximum
+NoName,,25,user,400,Missing name
+Valid Min,min@test.com,18,user,201,Minimum valid age
+Valid Max,max@test.com,99,user,201,Maximum valid age
