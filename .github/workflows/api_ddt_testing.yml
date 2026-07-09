@@ -69,7 +69,7 @@ jobs:
       - name: Execute Postman Collection
 
         run: |
-          newman run collections/DDT Practice CSV ReqRes.postman_collection.json \
+          newman run "collections/DDT Practice CSV ReqRes.postman_collection.json" \
           --iteration-data data/userdata.csv \
           -r cli,htmlextra \
           --reporter-htmlextra-export reports/PostmanAPIDDTReport.html \
