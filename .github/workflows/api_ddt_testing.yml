@@ -1,0 +1,93 @@
+name: Postman API Data Driven Tests
+
+#############################################################
+# Trigger Workflow
+#############################################################
+on:
+
+  # Run automatically when code is pushed
+  push:
+    branches:
+      - main
+
+  # Run automatically on Pull Request
+  pull_request:
+    branches:
+      - main
+
+  # Manual Run button
+  workflow_dispatch:
+
+#############################################################
+# Jobs
+#############################################################
+jobs:
+
+  run-api-tests:
+
+    #########################################################
+    # GitHub Runner
+    #########################################################
+    runs-on: ubuntu-latest
+
+    #########################################################
+    # Steps
+    #########################################################
+    steps:
+
+      #######################################################
+      # Step 1 - Download Repository
+      #######################################################
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      #######################################################
+      # Step 2 - Install NodeJS
+      #######################################################
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      #######################################################
+      # Step 3 - Install Newman
+      #######################################################
+      - name: Install Newman & HTML Reporter
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+
+      #######################################################
+      # Step 4 - Create Report Folder
+      #######################################################
+      - name: Create Reports Folder
+        run: mkdir -p reports
+
+      #######################################################
+      # Step 5 - Run Collection
+      #######################################################
+      - name: Execute Postman Collection
+
+        run: |
+          newman run collections/DDT Practice CSV ReqRes.postman_collection.json \
+          --iteration-data data/userdata.csv \
+          -r cli,htmlextra \
+          --reporter-htmlextra-export reports/PostmanAPIDDTReport.html \
+          --reporter-htmlextra-title "Student API Data Driven Report"
+
+      #######################################################
+      # Step 6 - Upload HTML Report
+      #######################################################
+      - name: Upload HTML Report
+
+        if: always()
+
+        uses: actions/upload-artifact@v4
+
+        with:
+
+          name: Postman-HTML-Report
+
+          path: reports/PostmanAPIDDTReport.html
+
+          retention-days: 30
